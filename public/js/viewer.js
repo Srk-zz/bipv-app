@@ -163,39 +163,51 @@ class BIPVViewer {
 
     calculateBIPVPotential() {
         if (!this.cityModel) return;
-
+    
         const ghi = parseFloat(this.params.get('ghi')) || 5.0;
         let totalPotential = 0;
-
+    
         this.cityModel.traverse((child) => {
             if (child.isMesh && child.geometry) {
                 const geometry = child.geometry;
                 if (!geometry.attributes.position) return;
-
+    
                 geometry.computeVertexNormals();
-
+    
                 const normalMatrix = new THREE.Matrix3().getNormalMatrix(child.matrixWorld);
                 const normal = new THREE.Vector3(0, 1, 0).applyMatrix3(normalMatrix).normalize();
-
+    
                 const sunDirection = this.sunLight.position.clone().normalize();
                 const angle = Math.max(0, normal.dot(sunDirection));
-
+    
                 const surfaceArea = this.calculateSurfaceArea(geometry);
                 const efficiency = 0.15;
-
+    
                 const energy = ghi * surfaceArea * angle * efficiency;
                 totalPotential += energy;
-
+    
                 if (child.material) {
                     child.material.color.setHSL(angle * 0.3, 1, 0.5);
                 }
             }
         });
-
+    
+        // Apply reduction and calculate range
+        totalPotential = Math.max(0, totalPotential - 4_000_000); // Reduce by 4 million kWh
+        const rangeMinKWh = totalPotential.toFixed(2);
+        const rangeMaxKWh = (totalPotential + 5_000_000).toFixed(2);
+    
+        const rangeMinMWh = (totalPotential / 1_000).toFixed(2);
+        const rangeMaxMWh = ((totalPotential + 5_000_000) / 1_000).toFixed(2);
+    
         this.updateOverlay(
-            `GHI Value: ${ghi} kWh/m²/day<br>Estimated Daily BIPV Potential: ${totalPotential.toFixed(2)} kWh`
+            `GHI Value: ${ghi} kWh/m²/day<br>
+            Estimated Daily BIPV Potential: ${rangeMinKWh} - ${rangeMaxKWh} kWh<br>
+            Estimated Daily BIPV Potential: ${rangeMinMWh} - ${rangeMaxMWh} MWh`
         );
     }
+    
+    
 
     calculateSurfaceArea(geometry) {
         let area = 0;
