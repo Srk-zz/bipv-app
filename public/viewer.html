@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIPV Assessment - Viewer</title>
+    <link rel="stylesheet" href="css/viewer.css">
+</head>
+<body>
+    <div id="info">
+        <div id="date"></div>
+        <div id="sun-position"></div>
+        <div id="energy-potential"></div>
+    </div>
+    <div id="viewer"></div>
+    <!-- Add SunCalc directly -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.159.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.159.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="js/viewer.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "bipv-application",
+  "version": "1.0.0",
+  "description": "BIPV Assessment using LOD-1 3D City Model",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "multer": "^1.4.5-lts.1",
+    "three": "^0.159.0",
+    "suncalc": "^1.9.0",
+    "dotenv": "^16.0.3"
+  }
+}
